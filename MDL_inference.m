@@ -1,7 +1,13 @@
-clear all
+clear
+
+minver = '9.7';
+if ~strncmp(version,minver,1)
+  warning('MYTEST:VERCHK',...
+      'Script verified on MATLAB 2019b v9.7, currently running v%s',minver)
+end
 
 format compact
-dfile ='Output_Ts100_Ns100.txt';
+dfile ='Output_Ts10_Ns100.txt';
 if exist(dfile, 'file') ; delete(dfile); end
 diary(dfile)
 
@@ -9,7 +15,7 @@ diary(dfile)
 diary on
 
 g = 10; %Number of genes in the network
-Tsamples = 100; %length of time series
+Tsamples = 10; %length of time series
 n = Tsamples - 1;
 num_datasets = 100; %Number of datasets, each dataset is a time series of 
                     %length Tsamples
@@ -41,6 +47,7 @@ for gene_id = gene_list
     % and each sample
     L_M_combined = zeros(num_datasets,tot);
     L_N_combined= zeros(num_datasets,tot);
+    cons_sample_id = zeros(1,num_datasets);
     for sample_id = 1:num_datasets
         run(strcat("100_samples_1000_datasets/random_network4_",...
             string(sample_id)))
@@ -48,9 +55,12 @@ for gene_id = gene_list
             Gene7;Gene8;Gene9;Gene10];
         x = data(:,1:Tsamples-1);
         y = data(gene_id,2:Tsamples);
-        if (sum(y) <= 1 || sum(y) >= n-1)
+        if (sum(y) <= 1  || sum(y) >= n-1)
+            % Removing this improves detection for smaller # datasets
             %disp('all values are 0 or 1');
             disc_sample = disc_sample+1;
+            cons_sample_id(sample_id)=1;
+            continue;
         end
         h = sum(y)/n;
         L0_N = n*(-h*log2(h)-(1-h)*log2(1-h)) + 0.5;
@@ -129,6 +139,8 @@ for gene_id = gene_list
         end
     end
     my_ind = find(~all(L_M_combined == 0,2));
+    %my_ind = 1-cons_sample_id;
+    if(~all(my_ind == 0,2))
     temp = sum(L_N_combined(my_ind,:),1)+mean(L_M_combined(my_ind,:),1);
     [sorted_val, sorted_id] = sort(temp);
 
@@ -147,6 +159,10 @@ for gene_id = gene_list
     disp(find(sorted_id-55 == find(ismember(H,act_pred(gene_id,:),'rows'))))
     disp('Most probable 3 gene predictor set:')
     disp(H(sorted_id(find(sorted_id>55, 1, 'first'))-55,:))
+ 
+    else
+        disp('Estimated predictor set: NULL')
+    end
 end
 diary off
 format loose
