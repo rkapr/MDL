@@ -133,6 +133,6 @@ for gene_id = 7
     disp('Rank of actual predictor set:')
     H = combnk(1:g,3);
     find(sorted_id-55 == find(ismember(H,act_pred(g,:),'rows')))
-    disp('Most probable 3 set predictor:')
+    disp('Most probable 3 gene predictor:')
     H(sorted_id(find(sorted_id>55, 1, 'first'))-55,:)
 end
