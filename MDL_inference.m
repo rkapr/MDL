@@ -1,7 +1,7 @@
 clear all
 
 format compact
-dfile ='Output.txt';
+dfile ='Output_Ts100_Ns100.txt';
 if exist(dfile, 'file') ; delete(dfile); end
 diary(dfile)
 
@@ -13,7 +13,7 @@ Tsamples = 100; %length of time series
 n = Tsamples - 1;
 num_datasets = 100; %Number of datasets, each dataset is a time series of 
                     %length Tsamples
-
+gene_list = 1:g;
 % Array of gene names
 genes = [];
 for i = 1:g
@@ -31,7 +31,7 @@ H_numEl_arr=zeros(1,K); % Array containing number of possible predictor
 for k = 1:K; H_numEl_arr(k)=size(combnk(1:g,k),1);end
 tot = sum(H_numEl_arr); % Total number of predictor sets
 pred = {}; % Cell array to store predictor gene sets for each gene
-for gene_id = 2
+for gene_id = gene_list
     
     disp(genes(gene_id))
     disc_sample=0; % Varible to store number of datasets with constant gene
@@ -133,16 +133,18 @@ for gene_id = 2
     [sorted_val, sorted_id] = sort(temp);
 
     disp(strcat('Constant datasets: ',num2str(disc_sample),'/',num2str(num_datasets)))
-
-    min_id = sorted_id(1)-H_numEl_arr;
+    disp('Actual predictor set:')
+    disp(act_pred(gene_id,:))
+    
+    min_id = sorted_id(1)-[0,cumsum(H_numEl_arr(1:end-1))];
     k = find(min_id>0,1,'last');
     H = combnk(1:g,k);
     disp('Estimated predictor set:')
-    disp(H(min_id(k-1),:))
-    pred(end+1) = {genes(H(min_id(k-1),:).')};
+    disp(H(min_id(k),:))
+    pred(end+1) = {genes(H(min_id(k),:).')};
     disp('Rank of actual predictor set:')
     H = combnk(1:g,3);
-    disp(find(sorted_id-55 == find(ismember(H,act_pred(g,:),'rows'))))
+    disp(find(sorted_id-55 == find(ismember(H,act_pred(gene_id,:),'rows'))))
     disp('Most probable 3 gene predictor set:')
     disp(H(sorted_id(find(sorted_id>55, 1, 'first'))-55,:))
 end
