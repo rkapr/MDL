@@ -1,4 +1,4 @@
-clear
+ clear
 
 minver = '9.7';
 if ~strncmp(version,minver,1)
@@ -7,7 +7,7 @@ if ~strncmp(version,minver,1)
 end
 
 format compact
-dfile ='Output_Ts10_Ns100.txt';
+dfile ='Output_Ts100_Ns100.txt';
 if exist(dfile, 'file') ; delete(dfile); end
 diary(dfile)
 
@@ -15,17 +15,11 @@ diary(dfile)
 diary on
 
 g = 10; %Number of genes in the network
-Tsamples = 10; %length of time series
+Tsamples = 100; %length of time series
 n = Tsamples - 1;
 num_datasets = 100; %Number of datasets, each dataset is a time series of 
                     %length Tsamples
-gene_list = 1:g;
-% Array of gene names
-genes = [];
-for i = 1:g
-    genes = [genes,strcat('Gene',string(i))];
-end
-genes = cellstr(genes);
+gene_list = 1:10;
 
 % Actual Predictors
 act_pred = [2,3,10;6,8,9;1,9,10;2,5,6;1,4,6;...
@@ -37,6 +31,18 @@ H_numEl_arr=zeros(1,K); % Array containing number of possible predictor
 for k = 1:K; H_numEl_arr(k)=size(combnk(1:g,k),1);end
 tot = sum(H_numEl_arr); % Total number of predictor sets
 pred = {}; % Cell array to store predictor gene sets for each gene
+
+% Array of gene names
+genes = [];
+for i = 1:g
+    genes = [genes,strcat('Gene',string(i))];
+end
+genes = cellstr(genes);
+
+% For SF calculations:
+% maxval = zeros(g,num_datasets);
+% SF_counts = zeros(g,tot);
+
 for gene_id = gene_list
     
     disp(genes(gene_id))
@@ -48,6 +54,7 @@ for gene_id = gene_list
     L_M_combined = zeros(num_datasets,tot);
     L_N_combined= zeros(num_datasets,tot);
     cons_sample_id = zeros(1,num_datasets);
+    
     for sample_id = 1:num_datasets
         run(strcat("100_samples_1000_datasets/random_network4_",...
             string(sample_id)))
@@ -127,39 +134,66 @@ for gene_id = gene_list
                 sample_L_M = [sample_L_M, L_M];
                 sample_L_N = [sample_L_N, L_N]; 
             else 
-                sample_L_M = [sample_L_M, repmat(L0_M,1,sum(H_numEl_arr(k:end)))];
-                sample_L_N = [sample_L_N, repmat(L0_M,1,sum(H_numEl_arr(k:end)))];
+                sample_L_M = [sample_L_M, repmat(L0_M,1,H_numEl_arr(k))];
+                sample_L_N = [sample_L_N, repmat(L0_M,1,H_numEl_arr(k))];
                 break;
             end
+
        
         end
         if (~isempty(sample_L_M) && ~isempty(sample_L_N))
-            L_M_combined(sample_id,:) = sample_L_M;
-            L_N_combined(sample_id,:) = sample_L_N;
+           L_M_combined(sample_id,:) = sample_L_M;
+           L_N_combined(sample_id,:) = sample_L_N;
         end
+        % For SF calculations:
+%         temp1 = [sample_L_M];
+%         temp2 = [sample_L_N];
+%         kk=convhull(temp1,temp2);
+%         temp3=temp1(kk);
+%         temp4=temp2(kk);
+%         slope_val = (temp4(2:end) - temp4(1:end-1))./(temp3(2:end)-temp3(1:end-1));
+%         if ~isempty(max(kk(slope_val<-1)))
+%             %maxval(gene_id,sample_id) = max(kk(slope_val<-1));
+%             [SF_sample_counts,SF_id]=groupcounts(kk(slope_val< -1));
+%             SF_counts(gene_id,SF_id) = SF_counts(gene_id,SF_id)+SF_sample_counts.';
+%         end
     end
     my_ind = find(~all(L_M_combined == 0,2));
-    %my_ind = 1-cons_sample_id;
     if(~all(my_ind == 0,2))
-    temp = sum(L_N_combined(my_ind,:),1)+mean(L_M_combined(my_ind,:),1);
-    [sorted_val, sorted_id] = sort(temp);
-
-    disp(strcat('Constant datasets: ',num2str(disc_sample),'/',num2str(num_datasets)))
-    disp('Actual predictor set:')
-    disp(act_pred(gene_id,:))
-    
-    min_id = sorted_id(1)-[0,cumsum(H_numEl_arr(1:end-1))];
-    k = find(min_id>0,1,'last');
-    H = combnk(1:g,k);
-    disp('Estimated predictor set:')
-    disp(H(min_id(k),:))
-    pred(end+1) = {genes(H(min_id(k),:).')};
-    disp('Rank of actual predictor set:')
-    H = combnk(1:g,3);
-    disp(find(sorted_id-55 == find(ismember(H,act_pred(gene_id,:),'rows'))))
-    disp('Most probable 3 gene predictor set:')
-    disp(H(sorted_id(find(sorted_id>55, 1, 'first'))-55,:))
- 
+        temp = sum(L_N_combined(my_ind,:),1)+mean(L_M_combined(my_ind,:),1);
+        [sorted_val, sorted_id] = sort(temp);
+        
+        disp(strcat('Constant datasets: ',num2str(disc_sample),'/',num2str(num_datasets)))
+        disp('Actual predictor set:')
+        disp(act_pred(gene_id,:))
+        
+        min_id = sorted_id(1)-[0,cumsum(H_numEl_arr(1:end-1))];
+        k = find(min_id>0,1,'last');
+        H = combnk(1:g,k);
+        disp('Estimated predictor set:')
+        disp(H(min_id(k),:))
+        pred(end+1) = {genes(H(min_id(k),:).')};
+        disp('Rank of actual predictor set:')
+        H = combnk(1:g,3);
+        disp(find(sorted_id-55 == find(ismember(H,act_pred(gene_id,:),'rows'))))
+        disp('Most probable 3 gene predictor set:')
+        disp(H(sorted_id(find(sorted_id>55, 1, 'first'))-55,:))
+        
+        % For SF calculations:
+        %     peaks = find(SF_counts(gene_id,:)>0);
+        %     min_id = peaks(end)-[0,cumsum(H_numEl_arr(1:end-1))];
+        %     kval = find(min_id>0,1,'last');
+        %     H = combnk(1:g,kval);
+        %     disp('Estimated predictor set SF:')
+        %     disp(H(min_id(kval),:))
+        
+        %     [SF_res_len,SF_res_ids] = sort(temp(peaks(end-1):peaks(end)));
+        %     if (all(SF_res_ids+peaks(end-1)>55))
+        %
+        %         disp('Other likely 3 gene predictor sets SF (increasing codelengths):')
+        %         disp(H(SF_res_ids+peaks(end-1)-55,:))
+        %     end
+        
     else
         disp('Estimated predictor set: NULL')
     end
