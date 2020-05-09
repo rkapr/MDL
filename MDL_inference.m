@@ -14,11 +14,11 @@ genes = cellstr(genes);
 act_pred = [2,3,10;6,8,9;1,9,10;2,5,6;1,4,6;1,6,10;6,7,8;1,4,7;2,6,9;4,5,7];
 
 
-num_datasets = 1000; 
+num_datasets = 100; 
 K = 3;
 tot = 0; for k = 1:K; tot=tot+size(combnk(1:g,k),1);end
 pred = {};
-for gene_id = 7
+for gene_id = 1:g
     
     genes(gene_id)
     disc_sample=0;
