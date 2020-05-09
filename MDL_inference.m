@@ -7,35 +7,45 @@ diary(dfile)
 
 
 diary on
-g = 10;
-Tsamples = 100;
+
+g = 10; %Number of genes in the network
+Tsamples = 100; %length of time series
 n = Tsamples - 1;
+num_datasets = 100; %Number of datasets, each dataset is a time series of 
+                    %length Tsamples
 
+% Array of gene names
 genes = [];
-
 for i = 1:g
     genes = [genes,strcat('Gene',string(i))];
 end
 genes = cellstr(genes);
 
-act_pred = [2,3,10;6,8,9;1,9,10;2,5,6;1,4,6;1,6,10;6,7,8;1,4,7;2,6,9;4,5,7];
+% Actual Predictors
+act_pred = [2,3,10;6,8,9;1,9,10;2,5,6;1,4,6;...
+    1,6,10;6,7,8;1,4,7;2,6,9;4,5,7];
 
-
-num_datasets = 100; 
-K = 3;
-H_numEl_arr=zeros(1,K);for k = 1:K; H_numEl_arr(k)=size(combnk(1:g,k),1);end
-tot = sum(H_numEl_arr);
-pred = {};
+K = 3; % Maximum number of allowed predictors per gene
+H_numEl_arr=zeros(1,K); % Array containing number of possible predictor
+                        % set for each k = 1:K
+for k = 1:K; H_numEl_arr(k)=size(combnk(1:g,k),1);end
+tot = sum(H_numEl_arr); % Total number of predictor sets
+pred = {}; % Cell array to store predictor gene sets for each gene
 for gene_id = 2
     
     disp(genes(gene_id))
-    disc_sample=0;
+    disc_sample=0; % Varible to store number of datasets with constant gene
+                   % expression
     
+    % Matrices to store model and noise codelength for each predictor set
+    % and each sample
     L_M_combined = zeros(num_datasets,tot);
     L_N_combined= zeros(num_datasets,tot);
     for sample_id = 1:num_datasets
-        run(strcat("100_samples_1000_datasets/random_network4_",string(sample_id)))
-        data = [Gene1;Gene2;Gene3;Gene4;Gene5;Gene6;Gene7;Gene8;Gene9;Gene10];
+        run(strcat("100_samples_1000_datasets/random_network4_",...
+            string(sample_id)))
+        data = [Gene1;Gene2;Gene3;Gene4;Gene5;Gene6;...
+            Gene7;Gene8;Gene9;Gene10];
         x = data(:,1:Tsamples-1);
         y = data(gene_id,2:Tsamples);
         if (sum(y) <= 1 || sum(y) >= n-1)
@@ -85,13 +95,10 @@ for gene_id = 2
                             fval(l_idx) = 1;
                         end
                         C_ml(l_idx) = Cml_calc(ml(l_idx));
-                        %prop = sym(ml_1(l_idx)/ml(l_idx));
                         P_ml(l_idx) = ((ml_1(l_idx)/ml(l_idx))^(ml_1(l_idx)))*((1-ml_1(l_idx)/ml(l_idx))^(ml(l_idx)-ml_1(l_idx)));
-                        %P_ml(l_idx) = vpa(prop^(ml_1(l_idx))*((1-prop)^(ml(l_idx)-ml_1(l_idx))),50);
                         P_ml_log(l_idx) = log2((ml_1(l_idx)/ml(l_idx)))*(ml_1(l_idx))+log2((1-ml_1(l_idx)/ml(l_idx)))*(ml(l_idx)-ml_1(l_idx));
                     end
                     P_y = prod(P_ml);
-                    %P_y = vpa(prod(sym(P_ml)),50);
                     if(P_y <= 1e-20 ) 
                         P_y_log = sum(P_ml_log(P_ml~=1));
                         L_N(i) = -P_y_log + d/2;
