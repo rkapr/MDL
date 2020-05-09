@@ -7,7 +7,7 @@ if ~strncmp(version,minver,1)
 end
 
 format compact
-dfile ='Output_Ts100_Ns100.txt';
+dfile ='Output_Ts10_Ns100.txt';
 if exist(dfile, 'file') ; delete(dfile); end
 diary(dfile)
 
@@ -15,7 +15,7 @@ diary(dfile)
 diary on
 
 g = 10; %Number of genes in the network
-Tsamples = 100; %length of time series
+Tsamples = 10; %length of time series
 n = Tsamples - 1;
 num_datasets = 100; %Number of datasets, each dataset is a time series of 
                     %length Tsamples
