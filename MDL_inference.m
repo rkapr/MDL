@@ -1,5 +1,12 @@
 clear all
 
+format compact
+dfile ='Output.txt';
+if exist(dfile, 'file') ; delete(dfile); end
+diary(dfile)
+
+
+diary on
 g = 10;
 Tsamples = 100;
 n = Tsamples - 1;
@@ -16,11 +23,12 @@ act_pred = [2,3,10;6,8,9;1,9,10;2,5,6;1,4,6;1,6,10;6,7,8;1,4,7;2,6,9;4,5,7];
 
 num_datasets = 100; 
 K = 3;
-tot = 0; for k = 1:K; tot=tot+size(combnk(1:g,k),1);end
+H_numEl_arr=zeros(1,K);for k = 1:K; H_numEl_arr(k)=size(combnk(1:g,k),1);end
+tot = sum(H_numEl_arr);
 pred = {};
-for gene_id = 1:g
+for gene_id = 2
     
-    genes(gene_id)
+    disp(genes(gene_id))
     disc_sample=0;
     
     L_M_combined = zeros(num_datasets,tot);
@@ -101,7 +109,9 @@ for gene_id = 1:g
             
                 sample_L_M = [sample_L_M, L_M];
                 sample_L_N = [sample_L_N, L_N]; 
-            else  
+            else 
+                sample_L_M = [sample_L_M, repmat(L0_M,1,sum(H_numEl_arr(k:end)))];
+                sample_L_N = [sample_L_N, repmat(L0_M,1,sum(H_numEl_arr(k:end)))];
                 break;
             end
        
@@ -115,24 +125,19 @@ for gene_id = 1:g
     temp = sum(L_N_combined(my_ind,:),1)+mean(L_M_combined(my_ind,:),1);
     [sorted_val, sorted_id] = sort(temp);
 
-    disp(strcat('Constant samples: ',string(disc_sample)))
+    disp(strcat('Constant datasets: ',num2str(disc_sample),'/',num2str(num_datasets)))
 
-    min_id = sorted_id(1);
-    k = 1;
+    min_id = sorted_id(1)-H_numEl_arr;
+    k = find(min_id>0,1,'last');
     H = combnk(1:g,k);
-
-
-    while (size(H,1) < min_id)
-        min_id = min_id - size(H,1);
-        k = k+1; 
-        H = combnk(1:g,k);    
-    end
-
-    H(min_id,:)
-    pred(end+1) = {genes(H(min_id,:).')};
+    disp('Estimated predictor set:')
+    disp(H(min_id(k-1),:))
+    pred(end+1) = {genes(H(min_id(k-1),:).')};
     disp('Rank of actual predictor set:')
     H = combnk(1:g,3);
-    find(sorted_id-55 == find(ismember(H,act_pred(g,:),'rows')))
-    disp('Most probable 3 gene predictor:')
-    H(sorted_id(find(sorted_id>55, 1, 'first'))-55,:)
+    disp(find(sorted_id-55 == find(ismember(H,act_pred(g,:),'rows'))))
+    disp('Most probable 3 gene predictor set:')
+    disp(H(sorted_id(find(sorted_id>55, 1, 'first'))-55,:))
 end
+diary off
+format loose
