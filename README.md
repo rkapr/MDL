@@ -14,16 +14,16 @@ Involved genes:
    Gene1 Gene2 Gene3 Gene4 Gene5 Gene6 Gene7 Gene8 Gene9 Gene10
  
  Transition functions:
-   Gene1 = ((!Gene2 & !Gene3) | Gene10)
- Gene2 = (!Gene9 & Gene6 & !Gene8)
- Gene3 = ((Gene9 & Gene10) | (Gene1 & Gene10))
- Gene4 = (!Gene2 | (!Gene5 & !Gene6))
- Gene5 = ((!Gene1 & Gene6) | (Gene1 & !Gene4 & !Gene6))
- Gene6 = ((!Gene6 & !Gene10) | (Gene6 & !Gene1 & Gene10))
- Gene7 = (!Gene8 | (Gene6 & !Gene7))
- Gene8 = ((!Gene4 & !Gene7) | (Gene4 & Gene1 & Gene7))
- Gene9 = ((!Gene9 & !Gene6) | (!Gene2 & !Gene6) | (Gene9 & Gene6))
- Gene10 = ((Gene4 & Gene5) | (Gene7 & Gene5) | (Gene7 & Gene4))
+ Gene1 = ((!Gene2 & !Gene3) | Gene10)\
+ Gene2 = (!Gene9 & Gene6 & !Gene8)\
+ Gene3 = ((Gene9 & Gene10) | (Gene1 & Gene10))\
+ Gene4 = (!Gene2 | (!Gene5 & !Gene6))\
+ Gene5 = ((!Gene1 & Gene6) | (Gene1 & !Gene4 & !Gene6))\
+ Gene6 = ((!Gene6 & !Gene10) | (Gene6 & !Gene1 & Gene10))\
+ Gene7 = (!Gene8 | (Gene6 & !Gene7))\
+ Gene8 = ((!Gene4 & !Gene7) | (Gene4 & Gene1 & Gene7))\
+ Gene9 = ((!Gene9 & !Gene6) | (!Gene2 & !Gene6) | (Gene9 & Gene6))\
+ Gene10 = ((Gene4 & Gene5) | (Gene7 & Gene5) | (Gene7 & Gene4))\
 
 # Results:
 
