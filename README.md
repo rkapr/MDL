@@ -21,7 +21,7 @@ Usage:
  Gene7 = (!Gene8 | (Gene6 & !Gene7))\
  Gene8 = ((!Gene4 & !Gene7) | (Gene4 & Gene1 & Gene7))\
  Gene9 = ((!Gene9 & !Gene6) | (!Gene2 & !Gene6) | (Gene9 & Gene6))\
- Gene10 = ((Gene4 & Gene5) | (Gene7 & Gene5) | (Gene7 & Gene4))\
+ Gene10 = ((Gene4 & Gene5) | (Gene7 & Gene5) | (Gene7 & Gene4))
 
 # Results:
 
