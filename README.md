@@ -2,8 +2,8 @@
 Project ECEN 647
 
 Usage:
-1. Create a random boolean network using BoolNet package in R and simulate time series from that network. OR use provided .sbml file to generate time series from given Boolean Network using the same package.
-2. Process the generated csv files to matlab scripts using provided unix commands. Execute script from inside the folder containing csv files.
+1. `CreateRandNetwork.R`: Create a random boolean network using BoolNet package in R and simulate time series from that network. OR use provided .sbml file to generate time series from given Boolean Network using the same package.
+2. `unix_processing.sh`: Process the generated csv files to matlab scripts using provided unix commands. Execute script from inside the folder containing csv files.
 3. Run the main matlab script after changing the directory loacation of data .m scripts generated in step 2.
 
 # Boolean Network used for testing:
