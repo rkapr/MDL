@@ -1,4 +1,4 @@
- clear
+clear
 
 minver = '9.7';
 if ~strncmp(version,minver,1)
@@ -7,7 +7,7 @@ if ~strncmp(version,minver,1)
 end
 
 format compact
-dfile ='Output_Ts10_Ns100.txt';
+dfile ='Output_Ts100_Ns1000.txt';
 if exist(dfile, 'file') ; delete(dfile); end
 diary(dfile)
 
@@ -15,9 +15,9 @@ diary(dfile)
 diary on
 
 g = 10; %Number of genes in the network
-Tsamples = 10; %length of time series
+Tsamples = 100; %length of time series
 n = Tsamples - 1;
-num_datasets = 100; %Number of datasets, each dataset is a time series of 
+num_datasets = 1000; %Number of datasets, each dataset is a time series of 
                     %length Tsamples
 gene_list = 1:10;
 
@@ -31,7 +31,7 @@ H_numEl_arr=zeros(1,K); % Array containing number of possible predictor
 for k = 1:K; H_numEl_arr(k)=size(combnk(1:g,k),1);end
 tot = sum(H_numEl_arr); % Total number of predictor sets
 pred = {}; % Cell array to store predictor gene sets for each gene
-
+network_cost = zeros(g,tot);
 % Array of gene names
 genes = [];
 for i = 1:g
@@ -197,6 +197,7 @@ for gene_id = gene_list
     else
         disp('Estimated predictor set: NULL')
     end
+    network_cost(gene_id,:) = temp;
 end
 diary off
 format loose
