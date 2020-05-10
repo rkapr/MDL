@@ -52,3 +52,7 @@ Usage:
 |Gene8           |1,4,7            |1|1|1|1|
 |Gene9           |2,6,9            |25|1|1|1|
 |Gene10          |4,5,7            |1|1|1|1|
+
+# References:
+1. [Inference of Gene Regulatory Networks Based on a Universal Minimum Description Length, John Dougherty, Ioan Tabus & Jaakko Astola](https://www.ncbi.nlm.nih.gov/pubmed/18437238)
+2. [Normalized Maximum Likelihood Models for Boolean Regression with Application to Prediction and Classification in Genomics, Ioan Tabus, Jorma Rissanen, Jaakko Astola](https://link.springer.com/chapter/10.1007/0-306-47825-0_10)
