@@ -1,5 +1,5 @@
     'Gene1'
-Constant datasets:0/100
+Constant datasets:210/1000
 Actual predictor set:
      2     3    10
 Estimated predictor set:
@@ -9,17 +9,17 @@ Rank of actual predictor set:
 Most probable 3 gene predictor set:
      2     3    10
     'Gene2'
-Constant datasets:93/100
+Constant datasets:960/1000
 Actual predictor set:
      6     8     9
 Estimated predictor set:
      6     9
 Rank of actual predictor set:
-    14
+     7
 Most probable 3 gene predictor set:
-     2     6     9
+     4     6     9
     'Gene3'
-Constant datasets:0/100
+Constant datasets:0/1000
 Actual predictor set:
      1     9    10
 Estimated predictor set:
@@ -29,17 +29,17 @@ Rank of actual predictor set:
 Most probable 3 gene predictor set:
      2     9    10
     'Gene4'
-Constant datasets:91/100
+Constant datasets:945/1000
 Actual predictor set:
      2     5     6
 Estimated predictor set:
-     2
+     2     5
 Rank of actual predictor set:
-    32
+    22
 Most probable 3 gene predictor set:
-     2     4     9
+     2     6     9
     'Gene5'
-Constant datasets:0/100
+Constant datasets:272/1000
 Actual predictor set:
      1     4     6
 Estimated predictor set:
@@ -49,7 +49,7 @@ Rank of actual predictor set:
 Most probable 3 gene predictor set:
      1     4     6
     'Gene6'
-Constant datasets:0/100
+Constant datasets:86/1000
 Actual predictor set:
      1     6    10
 Estimated predictor set:
@@ -59,17 +59,17 @@ Rank of actual predictor set:
 Most probable 3 gene predictor set:
      1     6    10
     'Gene7'
-Constant datasets:0/100
+Constant datasets:0/1000
 Actual predictor set:
      6     7     8
 Estimated predictor set:
-     6     8
+     8
 Rank of actual predictor set:
-    18
+    37
 Most probable 3 gene predictor set:
-     2     6     8
+     2     8     9
     'Gene8'
-Constant datasets:0/100
+Constant datasets:0/1000
 Actual predictor set:
      1     4     7
 Estimated predictor set:
@@ -79,7 +79,7 @@ Rank of actual predictor set:
 Most probable 3 gene predictor set:
      1     4     7
     'Gene9'
-Constant datasets:79/100
+Constant datasets:867/1000
 Actual predictor set:
      2     6     9
 Estimated predictor set:
@@ -89,7 +89,7 @@ Rank of actual predictor set:
 Most probable 3 gene predictor set:
      2     6     9
     'Gene10'
-Constant datasets:0/100
+Constant datasets:0/1000
 Actual predictor set:
      4     5     7
 Estimated predictor set:
