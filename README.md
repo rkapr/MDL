@@ -1,4 +1,4 @@
-# MDL
+# Boolean Network Inference using Minimum Description Length
 Project ECEN 647
 
 Usage:
