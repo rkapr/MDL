@@ -25,8 +25,8 @@ Usage:
 
 # Results:
 
-|Gene of Interest|Actual Predictors|Estimated Predictors Ts=10,Ns=10|Estimated Predictors Ts=10,Ns=100|
-| -------------- |:---------------:| :-----------------------------:| :------------------------------:|
+|Gene of Interest|Actual Predictors|Estimated Predictors Ts=10,Ns=10|Estimated Predictors Ts=10,Ns=100|Estimated Predictors Ts=100,Ns=100|
+| -------------- |:---------------:| :-----------------------------:| :------------------------------:|:------------------------------:|
 |Gene1           |2,3,10           |2,7                             |2,3,10                           |
 |Gene2           |6,8,9            |NULL                            |NULL                             |
 |Gene3           |1,9,10           |10                              |9,10                             |
