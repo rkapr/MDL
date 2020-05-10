@@ -6,7 +6,7 @@ Usage:
 2. Process the generated csv files to matlab scripts using provided unix commands. Execute script from inside the folder containing csv files.
 3. Run the main matlab script after changing the directory loacation of data .m scripts generated in step 2.
 
-# Boolean Network usind for testing:
+# Boolean Network used for testing:
 
  Involved genes:\
    Gene1 Gene2 Gene3 Gene4 Gene5 Gene6 Gene7 Gene8 Gene9 Gene10
@@ -46,9 +46,9 @@ Usage:
 |Gene2           |6,8,9            |2|6,9|6,9|5|
 |Gene3           |1,9,10           |10|9,10|9,10|10|
 |Gene4           |2,5,6            |2|2,6|2,6|24|
-|Gene5           |1,4,6            |1,4,6|1,4,6|1,4,6|1|
-|Gene6           |1,6,10           |6,10|1,6,10|1,6,10|1|
+|Gene5           |1,4,6            |1|1|1|1|
+|Gene6           |1,6,10           |6,10|1|1|1|
 |Gene7           |6,7,8            |8|2,8|6,8|22|
-|Gene8           |1,4,7            |1,4,7|1,4,7|1,4,7|1|
-|Gene9           |2,6,9            |2|2,6,9|2,6,9|1|
-|Gene10          |4,5,7            |4,5,7|4,5,7|4,5,7|1|
+|Gene8           |1,4,7            |1|1|1|1|
+|Gene9           |2,6,9            |2|1|1|1|
+|Gene10          |4,5,7            |1|1|1|1|
