@@ -25,6 +25,21 @@ Usage:
 
 # Results:
 
+### Best predictor sets:
+|Gene of Interest|Actual Predictors|Estimated Predictors Ts=10,Ns=10|Estimated Predictors Ts=10,Ns=100|Estimated Predictors Ts=100,Ns=100|Estimated Predictors Ts=100,Ns=1000|
+| -------------- |:---------------:| :-----------------------------:| :------------------------------:|:------------------------------:|:------------------------------:|
+|Gene1           |2,3,10           |3,10|2,3,10|2,3,10|2,3,10|
+|Gene2           |6,8,9            |2|6,9|6,9|6,9|
+|Gene3           |1,9,10           |10|9,10|9,10|9,10|
+|Gene4           |2,5,6            |2|2,6|2,6|2,5|
+|Gene5           |1,4,6            |1,4,6|1,4,6|1,4,6|1,4,6|
+|Gene6           |1,6,10           |6,10|1,6,10|1,6,10|1,6,10|
+|Gene7           |6,7,8            |8|2,8|6,8|6,8|
+|Gene8           |1,4,7            |1,4,7|1,4,7|1,4,7|1,4,7|
+|Gene9           |2,6,9            |2|2,6,9|2,6,9|2,6,9|
+|Gene10          |4,5,7            |4,5,7|4,5,7|4,5,7|4,5,7|
+
+### Rank of actual predictor set in results (from 175 total sets for each gene):
 |Gene of Interest|Actual Predictors|Estimated Predictors Ts=10,Ns=10|Estimated Predictors Ts=10,Ns=100|Estimated Predictors Ts=100,Ns=100|Estimated Predictors Ts=100,Ns=1000|
 | -------------- |:---------------:| :-----------------------------:| :------------------------------:|:------------------------------:|:------------------------------:|
 |Gene1           |2,3,10           |3,10|2,3,10|2,3,10|
