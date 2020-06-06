@@ -53,6 +53,57 @@ Usage:
 |Gene9           |2,6,9            |25|1|1|1|
 |Gene10          |4,5,7            |1|1|1|1|
 
+# After accounting for dynamic errors:
+Gene  1 :
+After:  Gene10 ~Gene02*~Gene03 
+Before:  Gene10 ~Gene02*~Gene03 
+Actual Pred:  Gene10 ~Gene02*~Gene03
+
+Gene  2 :
+After:  Gene02*Gene06*Gene07 
+Before:  0 
+Actual Pred:  Gene06*~Gene08*~Gene09
+
+Gene  3 :
+After:  Gene01*Gene10 Gene09*Gene10 
+Before:  Gene09*Gene10 
+Actual Pred:  Gene01*Gene10 Gene09*Gene10
+
+Gene  4 :
+After:  ~Gene02 ~Gene05*~Gene06 
+Before:  ~Gene02 
+Actual Pred:  ~Gene02 ~Gene05*~Gene06
+
+Gene  5 :
+After:  ~Gene01*Gene06 Gene01*~Gene04*~Gene06 
+Before:  ~Gene01*Gene06 Gene01*~Gene04*~Gene06 
+Actual Pred:  ~Gene01*Gene06 Gene01*~Gene04*~Gene06
+
+Gene  6 :
+After:  ~Gene06*~Gene10 ~Gene01*Gene06*Gene10 
+Before:  ~Gene06*~Gene10 ~Gene01*Gene06*Gene10 
+Actual Pred:  ~Gene06*~Gene10 ~Gene01*Gene06*Gene10
+
+Gene  7 :
+After:  ~Gene08 Gene06*~Gene07 
+Before:  ~Gene08 
+Actual Pred:  ~Gene08 Gene06*~Gene07
+
+Gene  8 :
+After:  ~Gene04*~Gene07 Gene01*Gene04*Gene07 
+Before:  ~Gene04*~Gene07 Gene01*Gene04*Gene07 
+Actual Pred:  ~Gene04*~Gene07 Gene01*Gene04*Gene07
+
+Gene  9 :
+After:  ~Gene02*~Gene06 ~Gene06*~Gene09 Gene06*Gene09 
+Before:  ~Gene02 
+Actual Pred:  ~Gene02*~Gene06 ~Gene06*~Gene09 Gene06*Gene09
+
+Gene  10 :
+After:  Gene04*Gene05 Gene04*Gene07 Gene05*Gene07 
+Before:  Gene04*Gene05 Gene04*Gene07 Gene05*Gene07 
+Actual Pred:  Gene04*Gene05 Gene04*Gene07 Gene05*Gene07
+
 # References:
 1. [Inference of Gene Regulatory Networks Based on a Universal Minimum Description Length, John Dougherty, Ioan Tabus & Jaakko Astola](https://www.ncbi.nlm.nih.gov/pubmed/18437238)
 2. [Normalized Maximum Likelihood Models for Boolean Regression with Application to Prediction and Classification in Genomics, Ioan Tabus, Jorma Rissanen, Jaakko Astola](https://link.springer.com/chapter/10.1007/0-306-47825-0_10)
