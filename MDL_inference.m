@@ -1,3 +1,4 @@
+ 
 clear
 
 minver = '9.7';
@@ -7,18 +8,25 @@ if ~strncmp(version,minver,1)
 end
 
 format compact
-dfile ='Output_Ts100_Ns1000.txt';
-if exist(dfile, 'file') ; delete(dfile); end
-diary(dfile)
-
-
-diary on
 
 g = 10; %Number of genes in the network
-Tsamples = 100; %length of time series
-n = Tsamples - 1;
-num_datasets = 1000; %Number of datasets, each dataset is a time series of 
+Tsamples = 10; %length of time series
+
+num_datasets = 10; %Number of datasets, each dataset is a time series of 
                     %length Tsamples
+n = num_datasets*(Tsamples - 1);
+                    
+% dfile =strcat('Output_Ts',string(Tsamples),'_Ns',string(num_datasets),'.txt');
+% if exist(dfile, 'file') ; delete(dfile); end
+% diary(dfile)
+% 
+% 
+% diary on
+
+load('all_data.mat')
+gene_matrix2 = reshape(gene_matrix,10,100,1000);
+
+
 gene_list = 1:10;
 
 % Actual Predictors
@@ -31,6 +39,8 @@ H_numEl_arr=zeros(1,K); % Array containing number of possible predictor
 for k = 1:K; H_numEl_arr(k)=size(combnk(1:g,k),1);end
 tot = sum(H_numEl_arr); % Total number of predictor sets
 pred = {}; % Cell array to store predictor gene sets for each gene
+fval_cell = {};
+uniquerow_cell = {};
 network_cost = zeros(g,tot);
 % Array of gene names
 genes = [];
@@ -51,30 +61,22 @@ for gene_id = gene_list
     
     % Matrices to store model and noise codelength for each predictor set
     % and each sample
-    L_M_combined = zeros(num_datasets,tot);
-    L_N_combined= zeros(num_datasets,tot);
-    cons_sample_id = zeros(1,num_datasets);
+    L_M_combined = [];
+    L_N_combined= [];
     
-    for sample_id = 1:num_datasets
-        run(strcat("100_samples_1000_datasets/random_network4_",...
-            string(sample_id)))
-        data = [Gene1;Gene2;Gene3;Gene4;Gene5;Gene6;...
-            Gene7;Gene8;Gene9;Gene10];
-        x = data(:,1:Tsamples-1);
-        y = data(gene_id,2:Tsamples);
-        if (sum(y) <= 1  || sum(y) >= n-1)
+        y=gene_matrix2(gene_id,2:Tsamples,1:num_datasets);
+        y=reshape(y,1,[]);
+        x=gene_matrix2(:,1:Tsamples-1,1:num_datasets);
+        x=reshape(x,10,[]);
+        if (sum(y) < 1  || sum(y) > n-1)
             % Removing this improves detection for smaller # datasets
             %disp('all values are 0 or 1');
-            disc_sample = disc_sample+1;
-            cons_sample_id(sample_id)=1;
-            continue;
+            disc_sample = 1;
+            %continue;
         end
         h = sum(y)/n;
         L0_N = n*(-h*log2(h)-(1-h)*log2(1-h)) + 0.5;
         L0_M = log2(Cml_calc(n))+ (1/2)*log2(pi/2) + log2(1 + log(g));
-
-        sample_L_M = [];
-        sample_L_N = [];
 
         for k = 1:K
             L_lambda = min(g, log2(nchoosek(g,k)) + log2(k+1) + log2(1+log(g)) );
@@ -83,9 +85,11 @@ for gene_id = gene_list
                 H = combnk(1:g,k);
                 L_M = zeros(1,size(H,1));
                 L_N = zeros(1,size(H,1));
+                
                 for i = 1:size(H,1)
                     Xi = x(H(i,:),:);
                     [uniquerow, ~, rowidx] = unique(Xi.', 'rows');
+                    uniquerow_cell(gene_id,k,i)={uniquerow};
                     noccurrences = accumarray(rowidx, 1);
                     w = length(noccurrences);
                     d = w;
@@ -100,7 +104,7 @@ for gene_id = gene_list
                         ml_1(l_idx) = sum(y(rowidx==l_idx));
             
                         var1 = y(rowidx==l_idx);
-                        var2 = de2bi(ceil(ml(l_idx)/2));
+                        var2 = de2bi_code(ceil(ml(l_idx)/2));
            
                         if (ml_1(l_idx) < ml(l_idx) - ml_1(l_idx))
                             fval(l_idx) = 0;
@@ -111,6 +115,7 @@ for gene_id = gene_list
                         else
                             fval(l_idx) = 1;
                         end
+                        fval_cell(gene_id,k,i) = {fval};
                         C_ml(l_idx) = Cml_calc(ml(l_idx));
                         P_ml(l_idx) = ((ml_1(l_idx)/ml(l_idx))^(ml_1(l_idx)))*((1-ml_1(l_idx)/ml(l_idx))^(ml(l_idx)-ml_1(l_idx)));
                         P_ml_log(l_idx) = log2((ml_1(l_idx)/ml(l_idx)))*(ml_1(l_idx))+log2((1-ml_1(l_idx)/ml(l_idx)))*(ml(l_idx)-ml_1(l_idx));
@@ -131,19 +136,11 @@ for gene_id = gene_list
                     disp('val is zero')
                 end
             
-                sample_L_M = [sample_L_M, L_M];
-                sample_L_N = [sample_L_N, L_N]; 
-            else 
-                sample_L_M = [sample_L_M, repmat(L0_M,1,H_numEl_arr(k))];
-                sample_L_N = [sample_L_N, repmat(L0_M,1,H_numEl_arr(k))];
-                break;
+                L_M_combined = [L_M_combined, L_M];
+                L_N_combined = [L_N_combined, L_N]; 
             end
 
        
-        end
-        if (~isempty(sample_L_M) && ~isempty(sample_L_N))
-           L_M_combined(sample_id,:) = sample_L_M;
-           L_N_combined(sample_id,:) = sample_L_N;
         end
         % For SF calculations:
 %         temp1 = [sample_L_M];
@@ -157,13 +154,11 @@ for gene_id = gene_list
 %             [SF_sample_counts,SF_id]=groupcounts(kk(slope_val< -1));
 %             SF_counts(gene_id,SF_id) = SF_counts(gene_id,SF_id)+SF_sample_counts.';
 %         end
-    end
     my_ind = find(~all(L_M_combined == 0,2));
     if(~all(my_ind == 0,2))
         temp = sum(L_N_combined(my_ind,:),1)+mean(L_M_combined(my_ind,:),1);
         [sorted_val, sorted_id] = sort(temp);
         
-        disp(strcat('Constant datasets: ',num2str(disc_sample),'/',num2str(num_datasets)))
         disp('Actual predictor set:')
         disp(act_pred(gene_id,:))
         
@@ -178,6 +173,8 @@ for gene_id = gene_list
         disp(find(sorted_id-55 == find(ismember(H,act_pred(gene_id,:),'rows'))))
         disp('Most probable 3 gene predictor set:')
         disp(H(sorted_id(find(sorted_id>55, 1, 'first'))-55,:))
+        %cell2mat(fval_cell(gene_id,k,min_id(k)))
+        %cell2mat(uniquerow_cell(gene_id,k,min_id(k)))
         
         % For SF calculations:
         %     peaks = find(SF_counts(gene_id,:)>0);
@@ -193,11 +190,39 @@ for gene_id = gene_list
         %         disp('Other likely 3 gene predictor sets SF (increasing codelengths):')
         %         disp(H(SF_res_ids+peaks(end-1)-55,:))
         %     end
-        
+        sorted_id_genes(gene_id,:) = sorted_id;
     else
+        disp(strcat('All constant data: ',num2str(disc_sample)))
         disp('Estimated predictor set: NULL')
     end
     network_cost(gene_id,:) = temp;
+    % run("est_PBN")
 end
-diary off
+%diary off
+% save('Ts100_Ns1000')
+% save('Ts100_Ns1000/uniquerow_cell_Ts100_Ns1000','uniquerow_cell')
+% save('Ts100_Ns1000/fval_cell_Ts100_Ns1000','fval_cell')
+% save('Ts100_Ns1000/sorted_id_genes_Ts100_Ns1000','sorted_id_genes')
+% save(strcat('Ts',string(Tsamples),'_Ns',string(num_datasets)))
+
+valid_mat = zeros(g,tot);
+cumsm_H_numEl = cumsum(H_numEl_arr);
+
+for gene_id = 1:10
+    if sorted_id_genes(gene_id,1)==0
+        continue;
+    end
+valid_mat(gene_id,sorted_id_genes(gene_id,1))=1;
+min_id = sorted_id_genes(gene_id,1)-[0,cumsm_H_numEl(1:end-1)];
+k = find(min_id>0,1,'last');
+
+H = combnk(1:g,k);
+pred_id = H(min_id(k),:);
+for k1=k+1:3
+    H1 = combnk(1:g,k1);
+    valid_mat(gene_id,cumsm_H_numEl(k1-1)+find(sum(ismember(H1,pred_id),2)==k)) = 1;
+end
+end
+
+
 format loose
