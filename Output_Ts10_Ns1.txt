@@ -2,89 +2,71 @@
 Actual predictor set:
      2     3    10
 Estimated predictor set:
-     2     3    10
+     4
 Rank of actual predictor set:
-     1
+    19
 Most probable 3 gene predictor set:
      2     3    10
     {'Gene2'}
-Actual predictor set:
-     6     8     9
-Estimated predictor set:
-     6     8     9
-Rank of actual predictor set:
-     1
-Most probable 3 gene predictor set:
-     6     8     9
+All constant data:1
+Estimated predictor set: NULL
     {'Gene3'}
 Actual predictor set:
      1     9    10
 Estimated predictor set:
-     1     9    10
+    10
 Rank of actual predictor set:
-     1
+    11
 Most probable 3 gene predictor set:
-     1     9    10
+     2     9    10
     {'Gene4'}
-Actual predictor set:
-     2     5     6
-Estimated predictor set:
-     2     5     6
-Rank of actual predictor set:
-     1
-Most probable 3 gene predictor set:
-     2     5     6
+All constant data:1
+Estimated predictor set: NULL
     {'Gene5'}
 Actual predictor set:
      1     4     6
 Estimated predictor set:
-     1     4     6
-Rank of actual predictor set:
      1
+Rank of actual predictor set:
+    27
 Most probable 3 gene predictor set:
-     1     4     6
+     1     2     4
     {'Gene6'}
 Actual predictor set:
      1     6    10
 Estimated predictor set:
-     1     6    10
+    10
 Rank of actual predictor set:
-     1
+    28
 Most probable 3 gene predictor set:
-     1     6    10
+     1     4    10
     {'Gene7'}
 Actual predictor set:
      6     7     8
 Estimated predictor set:
-     6     7     8
+     8
 Rank of actual predictor set:
-     1
+   132
 Most probable 3 gene predictor set:
-     6     7     8
+     2     8     9
     {'Gene8'}
 Actual predictor set:
      1     4     7
 Estimated predictor set:
-     1     4     7
-Rank of actual predictor set:
      1
+Rank of actual predictor set:
+    25
 Most probable 3 gene predictor set:
-     1     4     7
+     1     2     7
     {'Gene9'}
-Actual predictor set:
-     2     6     9
-Estimated predictor set:
-     2     6     9
-Rank of actual predictor set:
-     1
-Most probable 3 gene predictor set:
-     2     6     9
+All constant data:1
+Estimated predictor set: NULL
     {'Gene10'}
 Actual predictor set:
      4     5     7
 Estimated predictor set:
-     4     5     7
+     7
 Rank of actual predictor set:
-     1
+    12
 Most probable 3 gene predictor set:
-     4     5     7
+     2     4     7
